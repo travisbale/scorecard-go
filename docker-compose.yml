@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  scorecard:
+    image: cosmtrek/air
+    command: '-c /app/.air.toml'
+    restart: always
+    container_name: scorecard
+    env_file: ./env/scorecard.env
+    working_dir: /app
+    ports:
+      - '5001:5000'
+    volumes:
+      - ./:/app
+
+  scorecard-db:
+    image: postgres:12-alpine
+    restart: always
+    container_name: scorecard-db
+    env_file: ./env/postgres.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+networks:
+  default:
+    name: scorecard_default
+
+volumes:
+  postgres_data:
